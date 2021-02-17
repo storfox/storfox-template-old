@@ -1,0 +1,19 @@
+#!/bin/bash
+
+DIRECTORY=$(cd `dirname $0` && pwd)
+ROOT=$DIRECTORY/../
+
+arr=()
+while IFS= read -r line; do
+    arr+=("$line")
+done < "$ROOT/.mypyingore"
+
+for value in "${arr[@]}"
+do
+  echo $value
+done
+
+#mypy "$ROOT/domain/*" && \
+#  mypy "$ROOT/app/*" && \
+#  black --check "$ROOT/domain" && \
+#  black --check "$ROOT/app"
