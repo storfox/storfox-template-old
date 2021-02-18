@@ -1,0 +1,140 @@
+syntax = "proto3";
+
+package customer;
+
+message Error {
+  string field = 1;
+  repeated string messages = 2;
+  repeated Error errors = 3;
+}
+
+// CUSTOMER DETAIL
+message CustomerDetailRequest {
+  message Metadata {
+    map<string, string> params = 1;
+  }
+  Metadata metadata = 1;
+}
+
+message CustomerDetailResponse {
+  int64 code = 1;
+  message Customer {
+    string guid = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string birth_date = 4;
+    message Address {
+      string first_name = 1;
+      string last_name = 2;
+      string phone_number = 3;
+      string address = 4;
+      string zip_code = 5;
+      string city = 6;
+      string country = 7;
+    }
+    repeated Address shipping_addresses = 5;
+    repeated Address billing_addresses = 6;
+  }
+  Customer result = 2;
+  repeated Error errors = 3;
+}
+
+// CUSTOMER LIST
+message CustomerListRequest {
+  message Metadata {
+    map<string, string> params = 1;
+  }
+  Metadata metadata = 1;
+}
+
+message CustomerListResponse {
+  int64 code = 1;
+  message Customer {
+    string guid = 1;
+    string full_name = 2;
+  }
+  repeated Customer results = 2;
+  repeated Error errors = 3;
+}
+
+// CUSTOMER CREATE
+message CustomerCreateRequest {
+  message Data {
+    string first_name = 2;
+    string last_name = 3;
+    string birth_date = 4;
+    message Address {
+      string first_name = 1;
+      string last_name = 2;
+      string phone_number = 3;
+      string address = 4;
+      string zip_code = 5;
+      string city = 6;
+      string country = 7;
+    }
+    repeated Address shipping_addresses = 5;
+    repeated Address billing_addresses = 6;
+  };
+  Data data = 1;
+}
+
+message CustomerCreateResponse {
+  int64 code = 1;
+  message Data {
+    string guid = 1;
+  }
+  repeated Error errors = 3;
+}
+
+
+// CUSTOMER UPDATE
+message CustomerUpdateRequest {
+  message Data {
+    string guid = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string birth_date = 4;
+    message Address {
+      string first_name = 1;
+      string last_name = 2;
+      string phone_number = 3;
+      string address = 4;
+      string zip_code = 5;
+      string city = 6;
+      string country = 7;
+    }
+    repeated Address shipping_addresses = 5;
+    repeated Address billing_addresses = 6;
+  };
+  Data data = 1;
+}
+
+message CustomerUpdateResponse {
+  int64 code = 1;
+  message Data {
+    string guid = 1;
+  }
+  repeated Error errors = 3;
+}
+
+// CUSTOMER DELETE
+message CustomerDeleteRequest {
+  int64 code = 1;
+  message Data {
+    string guid = 1;
+  }
+}
+
+message CustomerDeleteResponse {
+  int64 code = 1;
+  repeated Error errors = 3;
+}
+
+
+service CustomerService {
+  rpc DetailCustomer(CustomerDetailRequest) returns (CustomerDetailResponse);
+  rpc ListCustomer(CustomerListResponse) returns (CustomerListResponse);
+  rpc CreateCustomer(CustomerCreateRequest) returns (CustomerCreateResponse);
+  rpc UpdateCustomer(CustomerUpdateRequest) returns (CustomerUpdateResponse);
+  rpc DeleteCustomer(CustomerDeleteRequest) returns (CustomerDeleteResponse);
+}

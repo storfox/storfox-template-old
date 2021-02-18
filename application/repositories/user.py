@@ -1,5 +1,5 @@
-from storfox import Repository
-from sqlalchemy import select  # type: ignore
+from storfox_framework import Repository
+from sqlalchemy import select
 
 
 class LocationRepository(Repository):
