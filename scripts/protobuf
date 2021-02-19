@@ -1,1 +1,11 @@
-#!/bin/bash
+#!/bin/sh
+
+DIRECTORY=$(cd `dirname $0` && pwd)
+ROOT=$DIRECTORY/../
+
+# Remove old proto files
+rm -rf "${ROOT}genproto"
+mkdir "${ROOT}genproto"
+
+# Generate new proto files
+python -m grpc.tools.protoc -I "${ROOT}" --python_betterproto_out="${ROOT}genproto" ${ROOT}proto/*.proto
