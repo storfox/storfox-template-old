@@ -5,12 +5,12 @@ from storfox_framework import Container as BaseContainer
 from dependency_injector import providers
 
 # Application
-from application.controllers.echo import EchoController
+from application.controllers.customer import CustomerController
 from application.repositories.user import LocationRepository
 
 
 handlers = [
-    EchoController()
+    CustomerController()
 ]
 
 
