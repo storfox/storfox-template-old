@@ -32,4 +32,3 @@ class URL(object):
         qsl = dict(parse_qsl(query))
 
         return Params(qsl)
-

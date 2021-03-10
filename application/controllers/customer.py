@@ -1,23 +1,55 @@
-from genproto.customer import CustomerServiceBase
-from genproto.customer import CustomerCreateResponse
-from genproto.customer import CustomerDetailResponse
-from genproto.customer import CustomerListResponse
-from genproto.customer import CustomerUpdateResponse
-from genproto.customer import CustomerDeleteResponse
+import application.services.customer as svc
+import genproto.customer as customer_pb
+import application.dtos as customer_dto
+from storfox_framework import current_app as app
 
 
-class CustomerController(CustomerServiceBase):
-    async def detail_customer(self, **kwargs) -> "CustomerDetailResponse":
-        return CustomerDetailResponse()
+def handle_error(func):
+    request_type = func.__annotations__["request"]
+    reply_type = func.__annotations__["return"]
 
-    async def list_customer(self, **kwargs) -> "CustomerListResponse":
-        return CustomerListResponse()
+    async def wrapper(request: request_type) -> reply_type:
+        try:
+            return await func(request)
+        except Exception:
+            raise
 
-    async def create_customer(self, **kwargs) -> "CustomerCreateResponse":
-        return CustomerCreateResponse()
+    return wrapper
 
-    async def update_customer(self, **kwargs) -> "CustomerUpdateResponse":
-        return CustomerUpdateResponse()
 
-    async def delete_customer(self, **kwargs) -> "CustomerDeleteResponse":
-        return CustomerDeleteResponse()
+@app.grpc("/customer.CustomerService/DetailCustomer")
+async def detail(
+    request: customer_pb.CustomerDetailRequest,
+) -> customer_pb.CustomerDetailResponse:
+    return customer_pb.CustomerDetailResponse(code=0)
+
+
+@app.grpc("/customer.CustomerService/ListCustomer")
+async def list_customer(
+    request: customer_pb.CustomerListRequest,
+) -> customer_pb.CustomerListResponse:
+    return customer_pb.CustomerListResponse()
+
+
+@app.grpc("/customer.CustomerService/CreateCustomer")
+@handle_error
+async def create_customer(
+    request: customer_pb.CustomerCreateRequest,
+) -> customer_pb.CustomerCreateResponse:
+    req_dto = customer_dto.CustomerCreateReqDto.from_request(request)
+    res_dto = await svc.create_customer(req_dto)
+    return res_dto.to_response()
+
+
+@app.grpc("/customer.CustomerService/UpdateCustomer")
+async def update_customer(
+    request: customer_pb.CustomerUpdateRequest,
+) -> customer_pb.CustomerUpdateResponse:
+    return customer_pb.CustomerUpdateResponse()
+
+
+@app.grpc("/customer.CustomerService/DeleteCustomer")
+async def delete_customer(
+    request: customer_pb.CustomerDeleteRequest,
+) -> customer_pb.CustomerDeleteResponse:
+    return customer_pb.CustomerDeleteResponse()

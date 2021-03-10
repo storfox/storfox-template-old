@@ -14,7 +14,7 @@ class Params(object):
     def get(self, key: str) -> Optional[Value]:
         return self.params.get(key)
 
-    def get_list(self, key: str, delimiter: str = ',') -> Optional[Values]:
+    def get_list(self, key: str, delimiter: str = ",") -> Optional[Values]:
         value = self.params.get(key)
 
         if not value:

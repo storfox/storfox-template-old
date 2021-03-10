@@ -10,4 +10,3 @@ class Address(ValueObject):
     address: str
     city: str
     country: str
-

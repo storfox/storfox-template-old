@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DIRECTORY=$(cd "$(dirname "$0")" && pwd)
+ROOT=$DIRECTORY/..
+
+cd "$ROOT" || exit
+poetry shell
+
+alembic upgrade head

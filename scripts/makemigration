@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DIRECTORY=$(cd "$(dirname "$0")" && pwd)
+ROOT=$DIRECTORY/..
+
+cd "$ROOT" || exit
+poetry shell
+
+COUNT=$(find "$ROOT/migrations/versions/" -name '*.py' | wc -l )
+INDEX=$(printf "%0.4d" $((COUNT + 1)))
+DATE=$(date +"%Y%m%d_%H%M")
+
+alembic revision --autogenerate -m "${INDEX}_${DATE}"
